@@ -11,6 +11,7 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 {
     public Transform target;
     public GameObject panel;
+    public GameObject button;
     private bool isMouseDown = false;
     private bool isMouseUp = false;
     private float startMousePositionY;
@@ -20,7 +21,8 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     // Use this for initialization
     void Start()
     {
-
+        panel.SetActive(false);
+       
     }
 
     public void OnPointerDown(PointerEventData dt)
@@ -71,6 +73,7 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (target.position.y >= 850)
         {
             Disable();
+            isMouseUp = false;
         }
         
     }
@@ -78,5 +81,7 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     void Disable()
     {
         panel.SetActive(false);
+        target.position = startPosition;
+        button.GetComponent<Button>().interactable = true;
     }
 }

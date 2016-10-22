@@ -13,7 +13,8 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     public Transform target;
     public GameObject button;
-    public RectTransform rt; 
+    public RectTransform rt;
+    public GameObject panel; 
     private bool isMouseDown = false;
     private bool isMouseUp = false;
     private bool animationDone = false;
@@ -82,7 +83,7 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             
             if (rt.sizeDelta.x < (rtX + 30) && !animationDone)
             {
-                rt.sizeDelta = new Vector2(rt.sizeDelta.x + 10, rt.sizeDelta.y);
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x + 30, rt.sizeDelta.y);
                 if(rt.sizeDelta.x > (rtX + 30))
                 {
                     animationDone = true;
@@ -92,6 +93,13 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
             else if(rt.sizeDelta.x < -1000)
             {
                 Disable();
+                panel.SetActive(true);
+                
+               
+
+
+                isMouseUp = false;
+                animationDone = false;
             }
             else
             {
@@ -106,6 +114,10 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
 
     void Disable()
     {
-        button.gameObject.SetActive(false);
+
+        print("I am reaching this point");
+        button.GetComponent<Button>().interactable = false;
+        rt.offsetMax.Set(0, 0);
+        rt.offsetMin.Set(0, 0);
     }
 }
