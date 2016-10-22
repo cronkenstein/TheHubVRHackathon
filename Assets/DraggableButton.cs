@@ -21,12 +21,13 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private float rtX;
     private float startMousePositionX;
     private Vector3 startPosition;
+    private Vector2 startDelta;
     public bool shouldReturn;
 
     // Use this for initialization
     void Start()
     {
-        
+        startDelta = rt.sizeDelta;
     }
 
     public void OnPointerDown(PointerEventData dt)
@@ -95,9 +96,7 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                 Disable();
                 panel.SetActive(true);
                 
-               
-
-
+                
                 isMouseUp = false;
                 animationDone = false;
             }
@@ -106,18 +105,13 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x -30, rt.sizeDelta.y);
             }
         }
-        
-
-
 
     }
 
     void Disable()
-    {
-
-        print("I am reaching this point");
+    { 
         button.GetComponent<Button>().interactable = false;
-        rt.offsetMax.Set(0, 0);
-        rt.offsetMin.Set(0, 0);
+        rt.sizeDelta = startDelta;
+        target.position = startPosition;
     }
 }
