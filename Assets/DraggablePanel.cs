@@ -10,8 +10,9 @@ using System;
 public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Transform target;
-    public DraggablePanel panel;
+    public GameObject panel;
     private bool isMouseDown = false;
+    private bool isMouseUp = false;
     private float startMousePositionY;
     private Vector3 startPosition;
     public bool shouldReturn;
@@ -38,7 +39,12 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         isMouseDown = false;
 
-        if (shouldReturn)
+        
+        if (Math.Abs(target.position.y) >= 600)
+        {
+            isMouseUp = true;
+        }
+        else if (shouldReturn)
         {
             target.position = startPosition;
         }
@@ -58,15 +64,19 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             target.position = new Vector3(startPosition.x, pos);
         }
 
-        if (Math.Abs(target.position.y) >= 440)
+        if(isMouseUp)
+        {
+            target.position = new Vector3(startPosition.x, target.position.y + 30);
+        }
+        if (target.position.y >= 850)
         {
             Disable();
         }
+        
     }
 
     void Disable()
     {
-        panel = target.GetComponent<DraggablePanel>();
-        panel.Disable();
+        panel.SetActive(false);
     }
 }

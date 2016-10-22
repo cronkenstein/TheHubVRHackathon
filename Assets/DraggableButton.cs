@@ -12,26 +12,35 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
    
 
     public Transform target;
-    public DraggableButton button;
+    public GameObject button;
+    public RectTransform rt; 
     private bool isMouseDown = false;
-    private Vector3 startMousePosition;
+    private bool isMouseUp = false;
+    private bool animationDone = false;
+    private float rtX;
+    private float startMousePositionX;
     private Vector3 startPosition;
     public bool shouldReturn;
 
     // Use this for initialization
     void Start()
     {
-
+        
     }
 
     public void OnPointerDown(PointerEventData dt)
     {
         isMouseDown = true;
+        
 
         Debug.Log("Draggable Mouse Down");
 
         startPosition = target.position;
-        startMousePosition = Input.mousePosition;
+        startMousePositionX = Input.mousePosition.x;
+        rt = button.GetComponent<RectTransform>();
+        rtX = rt.rect.width;
+
+
     }
 
     public void OnPointerUp(PointerEventData dt)
@@ -39,27 +48,64 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         Debug.Log("Draggable mouse up");
 
         isMouseDown = false;
+        
 
-        if (shouldReturn)
+        if (Math.Abs(target.position.x) >= 1100 || Math.Abs(target.position.x)<=300)
+        {
+            isMouseUp = true;
+            
+        }
+        else if (shouldReturn)
         {
             target.position = startPosition;
         }
+
     }
+
 
     // Update is called once per frame
     void Update()
     {
+        
         if (isMouseDown)
         {
             Vector3 currentPosition = Input.mousePosition;
 
-            Vector3 diff = currentPosition - startMousePosition;
+            float diff = currentPosition.x - startMousePositionX;
 
-            Vector3 pos = startPosition + diff;
+            float pos = startPosition.x + diff;
 
-            target.position = pos;
+            target.position = new Vector3(pos, startPosition.y);
         }
+        if (isMouseUp)
+        {
+            
+            if (rt.sizeDelta.x < (rtX + 30) && !animationDone)
+            {
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x + 10, rt.sizeDelta.y);
+                if(rt.sizeDelta.x > (rtX + 30))
+                {
+                    animationDone = true;
+                }
+               
+            }
+            else if(rt.sizeDelta.x < -1000)
+            {
+                Disable();
+            }
+            else
+            {
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x -30, rt.sizeDelta.y);
+            }
+        }
+        
 
-       
+
+
+    }
+
+    void Disable()
+    {
+        button.gameObject.SetActive(false);
     }
 }
