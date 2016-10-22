@@ -6,9 +6,12 @@ using System;
 
 public class RotationIndex1 : MonoBehaviour
 {
-
-    private Quaternion q; 
+ 
     public Transform t;
+    public GameObject panel;
+    public GameObject canvas;
+    private Vector3 originVector;
+    private Vector3 futureVector;
 
     // Use this for initialization
     void Start () {
@@ -19,6 +22,20 @@ public class RotationIndex1 : MonoBehaviour
 	void Update () {
 	
 	}
+
+    public void initializePanel(GameObject canvasName)
+    {
+
+        canvas = canvasName;
+        originVector = canvas.GetComponent<Transform>().position;
+        futureVector = new Vector3(0, -30);
+    }
     
+    public void setRotationOne()
+    {
+        t = canvas.GetComponent<Transform>();
+        t.Translate(new Vector3(-45, t.position.y));
+        t.Rotate(Vector3.up, -2f);
+    }
     
 }

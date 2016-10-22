@@ -14,7 +14,10 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public Transform target;
     public GameObject button;
     public RectTransform rt;
-    public GameObject panel; 
+    public GameObject panel;
+    public GameObject canvas;
+    private PanelArray panelArr = new PanelArray();
+    private RotationIndex1 index1 = new RotationIndex1();
     private bool isMouseDown = false;
     private bool isMouseUp = false;
     private bool animationDone = false;
@@ -52,7 +55,7 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         isMouseDown = false;
         
 
-        if (Math.Abs(target.position.x) >= 1100 || Math.Abs(target.position.x)<=300)
+        if (Math.Abs(target.position.x) > 0 || Math.Abs(target.position.x)<0)
         {
             isMouseUp = true;
             
@@ -81,7 +84,25 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
         if (isMouseUp)
         {
-            
+            if (target.position.x < 0)
+            {
+                int x = panelArr.addPanel(3);
+                switch (x)
+                {
+                    case 1 :
+                        index1.initializePanel(canvas);
+                        index1.setRotationOne();
+                        break;
+                    case 3:
+                        break;
+                    case 5:
+                        break;
+                }
+            }
+            else
+            {
+
+            }
             if (rt.sizeDelta.x < (rtX + 30) && !animationDone)
             {
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x + 30, rt.sizeDelta.y);
@@ -91,7 +112,7 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
                 }
                
             }
-            else if(rt.sizeDelta.x < -1000)
+            else if(rt.sizeDelta.x < Math.Abs(300))
             {
                 Disable();
                 panel.SetActive(true);
