@@ -12,10 +12,12 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public Transform target;
     public GameObject panel;
     public GameObject button;
+    private PanelArray panelArray;
     private bool isMouseDown = false;
     private bool isMouseUp = false;
     private float startMousePositionY;
     private Vector3 startPosition;
+    private int id;
     public bool shouldReturn;
 
     // Use this for initialization
@@ -63,7 +65,7 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
             float pos = startPosition.y + diff;
 
-            target.position = new Vector3(startPosition.x, pos);
+            target.position = new Vector3(startPosition.x, pos, startPosition.z);
         }
 
         if(isMouseUp)
@@ -74,6 +76,7 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         {
             Disable();
             isMouseUp = false;
+            panelArray.removePanel(id);
         }
         
     }
@@ -83,5 +86,16 @@ public class DraggablePanel : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         panel.SetActive(false);
         target.position = startPosition;
         button.GetComponent<Button>().interactable = true;
+       
+    }
+
+    public void setInt(int num)
+    {
+        id = num;
+    }
+
+    public void setArray(ref PanelArray panelArray)
+    {
+        this.panelArray = panelArray;
     }
 }

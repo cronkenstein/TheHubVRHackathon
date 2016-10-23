@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System;
 
-public class RotationIndex1 : MonoBehaviour
+public class RotationIndex1 
 {
  
     public Transform t;
@@ -27,15 +27,14 @@ public class RotationIndex1 : MonoBehaviour
     {
 
         canvas = canvasName;
-        originVector = canvas.GetComponent<Transform>().position;
-        futureVector = new Vector3(0, -30);
+        
     }
     
     public void setRotationOne()
     {
         t = canvas.GetComponent<Transform>();
-        t.Translate(new Vector3(-45, t.position.y));
-        t.Rotate(Vector3.up, -2f);
+        t.Translate(new Vector3(-1000,0, -300));
+        t.Rotate(Vector3.up, -30f);
     }
     
 }

@@ -16,8 +16,11 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     public RectTransform rt;
     public GameObject panel;
     public GameObject canvas;
-    private PanelArray panelArr = new PanelArray();
+    private PanelArray panelArr;
     private RotationIndex1 index1 = new RotationIndex1();
+    private RotationIndex3 index3 = new RotationIndex3();
+    private RotationIndex2 index2 = new RotationIndex2();
+    private RotationIndex4 index4 = new RotationIndex4();
     private bool isMouseDown = false;
     private bool isMouseUp = false;
     private bool animationDone = false;
@@ -25,6 +28,7 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     private float startMousePositionX;
     private Vector3 startPosition;
     private Vector2 startDelta;
+    private int id;
     public bool shouldReturn;
 
     // Use this for initialization
@@ -53,12 +57,53 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         Debug.Log("Draggable mouse up");
 
         isMouseDown = false;
-        
 
-        if (Math.Abs(target.position.x) > 0 || Math.Abs(target.position.x)<0)
+
+        if (Math.Abs(target.position.x) > 0 || Math.Abs(target.position.x) < 0)
         {
             isMouseUp = true;
-            
+
+            if (target.position.x < -500)
+            {
+                int x = panelArr.addPanel(3);
+                print("This is x: " + x);
+                switch (x)
+                {
+                    case 1:
+                        index1.initializePanel(canvas);
+                        index1.setRotationOne();
+                        break;
+                    case 3:
+                        index3.initializePanel(canvas);
+                        index3.setRotationOne();
+                        break;
+                    case 5:
+                        break;
+                }
+                id = x;
+                panel.GetComponent<DraggablePanel>().setInt(id);
+
+            }
+            else if(target.position.x > 500)
+            {
+                int x = panelArr.addPanel(4);
+                switch (x)
+                {
+                    case 0:
+                        index2.initializePanel(canvas);
+                        index2.setRotationOne();
+                        break;
+                    case 2:
+                        index4.initializePanel(canvas);
+                        index4.setRotationOne();
+                        break;
+                    case 4:
+                        break;
+                }
+                id = x;
+                panel.GetComponent<DraggablePanel>().setInt(id);
+            }
+
         }
         else if (shouldReturn)
         {
@@ -71,7 +116,8 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
     // Update is called once per frame
     void Update()
     {
-        
+     
+
         if (isMouseDown)
         {
             Vector3 currentPosition = Input.mousePosition;
@@ -84,48 +130,31 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         }
         if (isMouseUp)
         {
-            if (target.position.x < 0)
-            {
-                int x = panelArr.addPanel(3);
-                switch (x)
-                {
-                    case 1 :
-                        index1.initializePanel(canvas);
-                        index1.setRotationOne();
-                        break;
-                    case 3:
-                        break;
-                    case 5:
-                        break;
-                }
-            }
-            else
-            {
-
-            }
             if (rt.sizeDelta.x < (rtX + 30) && !animationDone)
             {
                 rt.sizeDelta = new Vector2(rt.sizeDelta.x + 30, rt.sizeDelta.y);
-                if(rt.sizeDelta.x > (rtX + 30))
+                if (rt.sizeDelta.x > (rtX + 30))
                 {
                     animationDone = true;
                 }
-               
+
             }
-            else if(rt.sizeDelta.x < Math.Abs(300))
+            else if (rt.sizeDelta.x < Math.Abs(300))
             {
                 Disable();
                 panel.SetActive(true);
-                
-                
+
+
                 isMouseUp = false;
                 animationDone = false;
             }
             else
             {
-                rt.sizeDelta = new Vector2(rt.sizeDelta.x -30, rt.sizeDelta.y);
+                rt.sizeDelta = new Vector2(rt.sizeDelta.x - 30, rt.sizeDelta.y);
             }
+
         }
+
 
     }
 
@@ -134,5 +163,11 @@ public class DraggableButton : MonoBehaviour, IPointerDownHandler, IPointerUpHan
         button.GetComponent<Button>().interactable = false;
         rt.sizeDelta = startDelta;
         target.position = startPosition;
+        
+    }
+
+    public void setArray(ref PanelArray panelArry)
+    {
+        this.panelArr = panelArry;
     }
 }

@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PanelArray : MonoBehaviour {
+public class PanelArray {
 
-    public int[] panelArr = new int[6];
+    private int[] panelArr;
+    public PanelArray()
+    {
+        panelArr = new int[6];
+    }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+
+    // Use this for initialization
+    void Start () {
+        
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -30,6 +35,7 @@ public class PanelArray : MonoBehaviour {
                 }
                 else
                 {
+                    panelArr[x] = 1;
                     return x;
                 }
             }
@@ -45,10 +51,19 @@ public class PanelArray : MonoBehaviour {
                 }
                 else
                 {
+                    panelArr[x] = 1;
+                    
                     return x;
                 }
             }
         }
         return 0;
     }
+
+    public void removePanel(int num)
+    {
+        panelArr[num] = 0;
+    }
+
+
 }
